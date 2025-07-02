@@ -131,7 +131,7 @@ with tab2:
 
     etfs = ["SPY", "XLK", "XLF", "XLE", "XLV"]
     cols = st.columns(len(etfs))
-    weights = {etf: cols[i].slider(etf, 0, 100, 0, 5) for i, etf in enumerate(etfs)}
+    weights = {etf: cols[i].slider(etf, 0, 100, 0, 1) for i, etf in enumerate(etfs)}
     total = sum(weights.values())
 
     if total != 100:
