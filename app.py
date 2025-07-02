@@ -15,7 +15,7 @@ from utils.data_fetch import (
 # --- CONFIG ---
 FRED_API_KEY = "8f3c3a932886909645c3dfc413ee1488"
 st.set_page_config(layout="wide")
-st.markdown("# 📊 MacroStress Analyser")
+st.markdown("# MacroStress Analyser")
 st.markdown("**Visualize market reactions to macro shocks, stress test portfolios, and explore sector resilience.**")
 
 # --- SCENARIOS ---
@@ -41,37 +41,37 @@ tips = {
 }
 
 fun_facts = [
-    "📉 S&P 500 hit circuit breakers 4 times in 10 days (March 2020).",
-    "💸 Zimbabwe had 100 trillion dollar notes in 2008.",
-    "🛢️ In 2021, energy stocks outperformed tech.",
-    "🔁 Yield curve inversions preceded every U.S. recession since 1960s.",
-    "📈 Tesla’s valuation once topped the 10 largest automakers combined."
+    "S&P 500 hit circuit breakers 4 times in 10 days (March 2020).",
+    "Zimbabwe had 100 trillion dollar notes in 2008.",
+    "In 2021, energy stocks outperformed tech.",
+    "Yield curve inversions preceded every U.S. recession since 1960s.",
+    "Tesla’s valuation once topped the 10 largest automakers combined."
 ]
 
 # --- SIDEBAR ---
 with st.sidebar:
-    st.header("⚙️ Scenario Settings")
+    st.header("Scenario Settings")
     scenario = st.selectbox("Choose Macro Shock", list(scenarios.keys()))
     start_date, end_date = scenarios[scenario]
 
-    st.markdown("### 🧠 Scenario Description")
+    st.markdown("### Scenario Description")
     st.info(descriptions[scenario])
 
-    st.markdown("### 💡 Insight")
+    st.markdown("### Insight")
     st.success(tips[scenario])
 
-    st.markdown("### 🎲 Fun Macro Fact")
+    st.markdown("### Fun Macro Fact")
     st.info(random.choice(fun_facts))
 
     st.markdown("---")
-    st.caption("📬 Built by Kritika P.")
+    st.caption("Built by Kritika P.")
 
 # --- TABS ---
-tab1, tab2, tab3 = st.tabs(["📈 Market Data", "💼 Portfolio Simulation", "📊 Sector Heatmap"])
+tab1, tab2, tab3 = st.tabs(["Market Data", "Portfolio Simulation", "Sector Heatmap"])
 
 # --- TAB 1 ---
 with tab1:
-    st.subheader("🔑 ETF Sector Key")
+    st.subheader("ETF Sector Key")
     st.markdown("""
     | ETF  | Sector       |
     |------|--------------|
@@ -85,13 +85,13 @@ with tab1:
     col1, col2 = st.columns(2)
 
     with col1:
-        st.subheader("📈 S&P 500 (SPY)")
+        st.subheader("S&P 500 (SPY)")
         df_spy = get_market_data("SPY", start=start_date, end=end_date)
         fig1 = px.line(df_spy, x="Date", y="Price", template="plotly_dark")
         st.plotly_chart(fig1, use_container_width=True)
 
     with col2:
-        st.subheader("📉 Fed Funds Rate")
+        st.subheader("Fed Funds Rate")
         fed = get_fred_series("FEDFUNDS", api_key=FRED_API_KEY).loc[start_date:end_date].dropna().reset_index()
         fed.columns = ["Date", "Rate"]
         fig2 = px.line(fed, x="Date", y="Rate", template="plotly_dark")
@@ -100,7 +100,7 @@ with tab1:
     col3, col4 = st.columns(2)
 
     with col3:
-        st.subheader("💹 CPI Inflation YoY")
+        st.subheader("CPI Inflation YoY")
         cpi = get_fred_series("CPIAUCSL", api_key=FRED_API_KEY)
         cpi = (cpi.pct_change(12)*100).loc[start_date:end_date].dropna().reset_index()
         cpi.columns = ["Date", "CPI YoY (%)"]
@@ -108,7 +108,7 @@ with tab1:
         st.plotly_chart(fig3, use_container_width=True)
 
     with col4:
-        st.subheader("📉 Yield Curve (10Y − 3M)")
+        st.subheader("Yield Curve (10Y − 3M)")
         y10 = get_fred_series("GS10", api_key=FRED_API_KEY)
         y3 = get_fred_series("DTB3", api_key=FRED_API_KEY)
         yc = pd.merge(y10, y3, left_index=True, right_index=True, how="outer")
@@ -120,14 +120,14 @@ with tab1:
         fig4.add_hline(y=0, line_dash="dash", line_color="red")
         st.plotly_chart(fig4, use_container_width=True)
         if yc["Spread"].min() < 0:
-            st.warning("⚠️ Yield curve inversion detected — when the curve dips below 0, it often precedes a recession.")
+            st.warning("Yield curve inversion detected — when the curve dips below 0, it often precedes a recession.")
         else:
-            st.info("ℹ️ The yield curve is currently positive — inversions (when spread < 0) often signal recessions.")
+            st.info("The yield curve is currently positive — inversions (when spread < 0) often signal recessions.")
 
 
 # --- TAB 2 ---
 with tab2:
-    st.subheader("🎚️ Build Your Portfolio")
+    st.subheader("Build Your Portfolio")
 
     etfs = ["SPY", "XLK", "XLF", "XLE", "XLV"]
     cols = st.columns(len(etfs))
@@ -135,7 +135,7 @@ with tab2:
     total = sum(weights.values())
 
     if total != 100:
-        st.warning("⚠️ Weights must sum to 100%")
+        st.warning(" Weights must sum to 100%")
     else:
         selected = [etf for etf in etfs if weights[etf] > 0]
         df = get_multiple_etfs(selected, start=start_date, end=end_date)
@@ -156,7 +156,7 @@ with tab2:
 
 # --- TAB 3 ---
 with tab3:
-    st.subheader("📊 Sector Heatmap")
+    st.subheader(" Sector Heatmap")
 
     etf_map = {"XLK": "Technology", "XLF": "Financials", "XLE": "Energy", "XLV": "Healthcare"}
     data = {}
